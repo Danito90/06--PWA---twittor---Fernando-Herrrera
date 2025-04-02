@@ -84,7 +84,7 @@ self.addEventListener("fetch", (event) => {
                     console.warn("Fuente detectada, no se almacena en caché:", event.request.url);
                     return newRes; // Retorna la respuesta directamente sin cachear
                 }
-                console.log("Sirviendo desde la red", event.request.url);
+
                 return actualizaCacheDinamico(DYNAMIC_CACHE, event.request, newRes);
             });
         }
