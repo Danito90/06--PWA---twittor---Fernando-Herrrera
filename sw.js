@@ -16,7 +16,6 @@ const APP_SHELL = [ // Lo basico de la app y lo guardamos en static-cache.
     'img/avatars/wolverine.jpg',
     'js/app.js',
     'js/sw-utils.js',
-    'manifest.json',
     "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap",
     "https://fonts.gstatic.com/s/quicksand/v36/6xKtdSZaM9iE8KbpRA_hK1QNYuDyPw.woff2",
     "https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXiWtFCc.woff2",
