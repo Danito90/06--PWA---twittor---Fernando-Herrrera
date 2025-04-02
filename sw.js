@@ -1,7 +1,7 @@
 importScripts("js/sw-utils.js")
 
-const STATIC_CACHE = 'static-cache-v2';
-const DYNAMIC_CACHE = 'dynamic-cache-v1';
+const STATIC_CACHE = 'static-cache-v3';
+const DYNAMIC_CACHE = 'dynamic-cache-v2';
 const INMUTABLE_CACHE = 'inmutable-cache-v1';
 
 const APP_SHELL = [ // Lo basico de la app y lo guardamos en static-cache.
@@ -46,9 +46,14 @@ self.addEventListener("activate", (event) => {
 
             // Si la key no es igual a la cache estaticas, y contiene la palabra static, entonces se elimina.
             // key es el nombre de la cache.
-            if (key !== STATIC_CACHE && key.includes("static")) {
+            if ( key !== STATIC_CACHE && key.includes("static") ) {
                 return caches.delete(key);
             }
+
+            if ( key !== DYNAMIC_CACHE && key.includes('dynamic') ) {
+                return caches.delete(key);
+            }
+
         });
     });
 
