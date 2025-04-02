@@ -5,7 +5,7 @@ const DYNAMIC_CACHE = 'dynamic-cache-v1';
 const INMUTABLE_CACHE = 'inmutable-cache-v1';
 
 const APP_SHELL = [ // Lo basico de la app y lo guardamos en static-cache.
-    '/',
+    // '/', en produccion no sirve, hay q comentarlo
     'index.html',
     'css/style.css',
     'img/favicon.ico',
