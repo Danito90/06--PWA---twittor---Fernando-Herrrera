@@ -16,11 +16,11 @@ const APP_SHELL = [ // Lo basico de la app y lo guardamos en static-cache.
     'img/avatars/wolverine.jpg',
     'js/app.js',
     'js/sw-utils.js',
-    "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap",
-    "https://fonts.gstatic.com/s/quicksand/v36/6xKtdSZaM9iE8KbpRA_hK1QNYuDyPw.woff2",
-    "https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXiWtFCc.woff2",
-    "https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-solid-900.woff2",
-    "https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-solid-900.ttf"
+    // "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap",
+    // "https://fonts.gstatic.com/s/quicksand/v36/6xKtdSZaM9iE8KbpRA_hK1QNYuDyPw.woff2",
+    // "https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXiWtFCc.woff2",
+    // "https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-solid-900.woff2",
+    // "https://use.fontawesome.com/releases/v5.3.1/webfonts/fa-solid-900.ttf"
 ]
 
 const APP_SHELL_INMUTABLE = [ // Lo que no cambia nunca. Generalmente creado por terceros.
@@ -72,23 +72,26 @@ self.addEventListener("fetch", (event) => {
             return res;
         } else {
             // Si no existe en cache, entonces lo buscamos en la red.
-            // Puede pasar por ejemplo en casos de font de google.
-            // console.log("No existe en cache", event.request.url);
-            return fetch(event.request, {
-                mode: 'no-cors'
-            }).then((newRes) => {
-                // console.log("Nuevo", newRes);
+            console.log("No existe en cache, buscando en la red:", event.request.url);
+            return fetch(event.request).then((newRes) => {
+                // Si la respuesta es válida, la almacenamos en el caché dinámico
+                if (newRes && newRes.ok) {
+                    return actualizaCacheDinamico(DYNAMIC_CACHE, event.request, newRes);
+                }
+                return newRes; // Retornamos la respuesta aunque no sea válida
+            }).catch((error) => {
+                console.error("Error en la red o sin conexión:", error);
 
-                // Si la respuesta es una fuente (woff2, woff), no la cacheamos
-                if (event.request.url.includes(".woff2") || event.request.url.includes(".woff")) {
-                    console.warn("Fuente detectada, no se almacena en caché:", event.request.url);
-                    return newRes; // Retorna la respuesta directamente sin cachear
+                // Fallback para recursos específicos
+                if (event.request.url.includes(".jpg")) {
+                    return caches.match("/img/avatars/no-imagen.jpg"); // Imagen de fallback
                 }
 
-                return actualizaCacheDinamico(DYNAMIC_CACHE, event.request, newRes);
+                // Fallback genérico para otros recursos
+                return caches.match("/offline.html");
             });
         }
     });
 
-    event.respondWith(respuesta)
-})
+    event.respondWith(respuesta);
+});

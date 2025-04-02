@@ -4,12 +4,12 @@ var swLocation = '/06--PWA---twittor---Fernando-Herrrera/sw.js';
 
 if (navigator.serviceWorker){
 
-    if (url.includes('localhost')) {
+    if (url.includes('localhost') || url.includes('127.0.0.1')) {
         swLocation = '/sw.js';
     }
 
     navigator.serviceWorker.register(swLocation)
-    
+
     .then(function(registro){
         console.log('Registro exitoso', registro);
     })

@@ -1,18 +1,23 @@
 //* Funcion para guardar en cache dinamico
-function actualizaCacheDinamico( dynamicCache, req, res ) {
-    console.log("Actualizando cache dinamico", req.url);
-    return (dynamicCache, req, res) => {
-        // Si la respuesta es ok, entonces guardamos en cache. Es decir tiene data
+function actualizaCacheDinamico(dynamicCache, req, res) {
+    console.log("Actualizando cache dinamico", dynamicCache, req.url);
 
-        if (res.ok) {
-            // Abrimos la cache dinamica y guardamos la respuesta clonada.
-            return caches.open(dynamicCache).then((cache) => {
-                cache.put(req, res.clone());
-                return res.clone();
-            });
-        } else {
-            // Si no existe en cache, entonces lo devolvemos.
-            return res;
-        }
-    };
+
+    // Si la respuesta es ok, entonces guardamos en cache. Es decir tiene data
+    if (res.ok) {
+        // Abrimos la cache dinamica y guardamos la respuesta clonada.
+        return caches.open(dynamicCache).then(cache => {
+
+            cache.put(req, res.clone());
+
+            return res.clone();
+
+        });
+
+    } else {
+        // Si no existe en cache, entonces lo devolvemos.
+        return res;
+    }
+
+
 }
